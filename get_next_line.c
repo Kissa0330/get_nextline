@@ -11,24 +11,31 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 char	*get_next_line(int fd)
 {
-	static int	read_res;
+	static int	read_res = 1;
+	static int	current_fd = 0;
 	char		c;
 	int			i;
 	char		*res;
 
-	read_res = 1;
-	i = 0;
-	if (read_res == 0)
+	if (current_fd != fd)
+	{
+		current_fd = fd;
+		read_res = 1;
+	}
+	if (read_res == -1 || read_res == 0)
 		return (NULL);
+	i = 0;
 	res = malloc(BUFFER_SIZE + 1);
+	res[BUFFER_SIZE] = '\0';
 	while (i < BUFFER_SIZE)
 	{
 		read_res = read(fd, &c, 1);
-		if (read_res == 0)
-			return (res);
+		if (read_res == 0 || read_res == -1)
+			break;
 		if (c == '\0')
 			return (res);
 		res[i] = c;
@@ -36,6 +43,10 @@ char	*get_next_line(int fd)
 			return (res);
 		i++;
 	}
-	res[BUFFER_SIZE] = '\0';
+	if (read_res == -1)
+	{
+		free(res);
+		return (NULL);
+	}
 	return (res);
 }
