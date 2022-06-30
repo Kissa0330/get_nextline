@@ -2,16 +2,28 @@
 
 char	*get_next_line(int fd)
 {
-	static int	times;
-	void *res;
+	static int	read_res;
+	char		c;
+	int			i;
+	char	*res;
 
-	malloc(BUFFER_SIZE);
-	/*
-	・改行まで1文字づつ読み込む
-	・1回につき1行読み込む
-	・BUFFER_SIZEが尽きるまで読み取る
-	*/
-	
-	read(fd, res, 1);
+	read_res = 1;
+	i = 0;
+	if(read_res == 0)
+		return (NULL);
+	res = malloc(BUFFER_SIZE + 1);
+	while (i < BUFFER_SIZE)
+	{
+		read_res = read(fd, &c, 1);
+		if(read_res == 0)
+			return (res);
+		if(c == '\0')
+			return (res);
+		res[i] = c;
+		if(c == '\n')
+			return(res);
+		i++;
+	}
+	res[BUFFER_SIZE] = '\0';
 	return(res);
 }
