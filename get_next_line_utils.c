@@ -11,38 +11,83 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-void	init_static_val(int *current_fd, int fd, int *read_res)
+int	ft_strchr(char *s, int c)
 {
-	if (*current_fd != fd)
-	{
-		*current_fd = fd;
-		*read_res = 1;
-	}
-}
-
-char	*read_file(int fd, int *read_res)
-{
-	char	*res;
-	int		i;
+	int	i;
 
 	i = 0;
-	res = malloc(BUFFER_SIZE + 1);
-	if (res == NULL)
-		return (NULL);
-	res[BUFFER_SIZE] = '\0';
-	while (i < BUFFER_SIZE)
+	// if(s)
+	// 	return (-1);
+	// while (s[i] != (char)c)
+	// {
+	// 	if (s[i] == '\0')
+	// 		return (-1);
+	// 	i++;
+	// }
+	return (i);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	n;
+
+	n = 0;
+	while (str[n] != '\0')
+		n++;
+	return (n);
+}
+
+char	*ft_strdup(const char *src)
+{
+	char	*copy_str;
+	int		i;
+
+	copy_str = malloc(sizeof(char) * (ft_strlen(src) + 1));
+	if (copy_str == NULL)
+		return (copy_str);
+	i = 0;
+	while (*(src + i) != '\0')
 	{
-		*read_res = read(fd, res + i, 1);
-		if (*read_res == -1)
-		{
-			free(res);
-			return (NULL);
-		}
-		if (*read_res == 0 || res[i] == '\n')
-			return (res);
+		*(copy_str + i) = *(src + i);
 		i++;
 	}
-	if (i + 1 == BUFFER_SIZE)
-		res[i] = '\n';
-	return (res);
+	*(copy_str + i) = '\0';
+	return (copy_str);
+}
+
+void	ft_strlcat(char *dest, const char *src, size_t size)
+{
+	size_t	count1;
+	size_t	count2;
+
+	count1 = ft_strlen(dest);
+	count2 = 0;
+	while (src[count2] != '\0' && count1 + count2 < size - 1)
+	{
+		dest[count1 + count2] = src[count2];
+		count2++;
+	}
+	dest[count1 + count2] = '\0';
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	size_t	length;
+	char	*str;
+
+	if (s1 == NULL && s2 == NULL)
+		return (ft_strdup(""));
+	if (s1 == NULL)
+		return (ft_strdup(s2));
+	if (s2 == NULL)
+		return (ft_strdup(s1));
+	length = ft_strlen(s1) + ft_strlen(s2) + 1;
+	str = malloc(sizeof(char) * length);
+	if (str == NULL)
+		return (str);
+	ft_strlcat(str, s1, ft_strlen(s1) + 1);
+	ft_strlcat(str, s2, length);
+	free(s1);
+	free(s2);
+	return (str);
 }

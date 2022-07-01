@@ -19,7 +19,7 @@ int main()
 	int fd2 = open("./test/test2.txt", O_RDONLY);
 	res = get_next_line(fd2);
 	printf("test2 == %s\n", res);
-	int fd3 = open("./test/test3", O_RDONLY);
+	int fd3 = open("./test/test3.txt", O_RDONLY);
 	res = get_next_line(fd3);
 	printf("test3 == %s\n", res);
 	res = get_next_line(fd3);
