@@ -17,5 +17,7 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
+void	init_static_val(int *current_fd, int fd, int *read_res);
+char	*read_file(int fd, int *read_res);
 
 #endif

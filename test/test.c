@@ -8,14 +8,24 @@ int main()
 	char *res;
 
 	res = get_next_line(5);
-	printf("res == %s\n", res);
+	printf("test_null == %s\n", res);
 	
 	int fd = open("./test/test.txt", O_RDONLY);
 	for (size_t i = 0; i < 10; i++)
 	{
 		res = get_next_line(fd);
-		printf("res == %s\n", res);
+		printf("test1 == %s\n", res);
 	}
+	int fd2 = open("./test/test2.txt", O_RDONLY);
+	res = get_next_line(fd2);
+	printf("test2 == %s\n", res);
+	int fd3 = open("./test/test3", O_RDONLY);
+	res = get_next_line(fd3);
+	printf("test3 == %s\n", res);
+	res = get_next_line(fd3);
+	printf("test3 == %s\n", res);
 	close(fd);
+	close(fd2);
+	close(fd3);
 	return 0;
 }
