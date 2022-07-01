@@ -11,30 +11,35 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-char	*read_file(int fd, int *read_res)
+char	*read_file(int fd, int *is_continue)
 {
 	char	*res;
+	size_t	i;
 
-	if (!*read_res)
-		return (NULL);
+	i = 0;
 	res = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (res == NULL)
 		return (NULL);
 	res[BUFFER_SIZE] = '\0';
-	*read_res = read(fd, res, BUFFER_SIZE);
-	if (*read_res == -1)
+	while (i < BUFFER_SIZE)
 	{
-		free(res);
-		return (NULL);
+		*is_continue = read(fd, res + i, 1);
+		if (res[i] == '\n')
+		{
+			*is_continue = 0;
+			return (res);
+		}
+		if (*is_continue < 1)
+			return (res);
+		i ++;
 	}
 	return (res);
 }
 
 char	*get_next_line(int fd)
 {
-	static int	read_res = 1;
+	static int	is_continue = 1;
 	static int	current_fd = 0;
 	char		*res;
 	char		*buf;
@@ -45,19 +50,14 @@ char	*get_next_line(int fd)
 	if (current_fd != fd)
 	{
 		current_fd = fd;
-		read_res = 1;
+		is_continue = 1;
 	}
-	if (!read_res)
+	if (is_continue < 1)
 		return (NULL);
-	for (size_t i = 0; i < 10; i++)
-	// while (!ft_strchr(res, '\n') && read_res)
+	while (is_continue > 0)
 	{
-		printf("read_res == %d\n", read_res);
-		buf = read_file(current_fd, &read_res);
+		buf = read_file(current_fd, &is_continue);
 		res = ft_strjoin(res, buf);
 	}
-	if(ft_strchr(res, '\n'))
-		*(res + ft_strchr(res, '\n')) = '\0';
-	printf("res == %s\n", res);
 	return (res);
 }

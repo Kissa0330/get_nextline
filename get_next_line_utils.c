@@ -11,22 +11,6 @@
 /* ************************************************************************** */
 #include "get_next_line.h"
 
-int	ft_strchr(char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	// if(s)
-	// 	return (-1);
-	// while (s[i] != (char)c)
-	// {
-	// 	if (s[i] == '\0')
-	// 		return (-1);
-	// 	i++;
-	// }
-	return (i);
-}
-
 size_t	ft_strlen(const char *str)
 {
 	size_t	n;
@@ -76,7 +60,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	char	*str;
 
 	if (s1 == NULL && s2 == NULL)
-		return (ft_strdup(""));
+		return (NULL);
 	if (s1 == NULL)
 		return (ft_strdup(s2));
 	if (s2 == NULL)
