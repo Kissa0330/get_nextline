@@ -15,6 +15,7 @@ int main()
 	printf("test1 == %s\n", res);
 	res = "";
 	int fd2 = open("./test/test2.txt", O_RDONLY);
+	for (size_t i = 0; i < 5; i++)
 	while (res != NULL)
 	{
 		res = get_next_line(fd2);
@@ -22,6 +23,7 @@ int main()
 	}
 	res = "";
 	int fd3 = open("./test/test3.txt", O_RDONLY);
+	// for (size_t i = 0; i < 10; i++)
 	while (res != NULL)
 	{
 		res = get_next_line(fd3);

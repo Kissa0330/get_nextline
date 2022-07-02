@@ -11,59 +11,101 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-char	*read_file(int fd, int *is_continue)
+char	*read_file(int fd)
 {
+	char	*buf;
 	char	*res;
+	int		read_res;
 	size_t	i;
 
-	i = 0;
-	res = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (res == NULL)
+	res = NULL;
+	read_res = 1;
+	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (buf == NULL)
 		return (NULL);
-	res[BUFFER_SIZE] = '\0';
-	while (i < BUFFER_SIZE)
+	buf[BUFFER_SIZE] = '\0';
+	while (!ft_strchr(buf, '\n') && read_res != 0)
 	{
-		*is_continue = read(fd, res + i, 1);
-		if (res[i] == '\0' && i == 0)
-			return (free_strs(res, NULL));
-		if (res[i] == '\n' || *is_continue == 0)
+		read_res = read(fd, buf, BUFFER_SIZE);
+		i = 0;
+		if (read_res == -1)
 		{
-			res[i + 1] = '\0';
-			if (*is_continue == 0)
-				*is_continue = -1;
-			else
-				*is_continue = 0;
-			return (res);
+			free(buf);
+			return (NULL);
 		}
-		if (*is_continue == -1)
-			return (free_strs(res, NULL));
+		buf[read_res] = '\0';
+		// printf("read_res == %d\n", read_res);
+		// printf("buf == %s\n", buf);
+		// printf("befor res == %s\n", res);
+		res = ft_strjoin(res, buf);
+		// printf("res == %s\n", res);
 		i ++;
 	}
 	return (res);
 }
 
+char	*cut_line(char *static_str)
+{
+	char	*res;
+	size_t	i;
+
+	res = malloc(sizeof(char) * ft_strlen(static_str) + 1);
+	i = 0;
+	while (static_str[i] != '\n' && static_str[i])
+	{
+		res[i] = static_str[i];
+		i++;
+	}
+	if(static_str[i] == '\n')
+	{
+		res[i] = '\n';
+		res[i + 1] = '\0';
+	}
+	else
+		res[i] = '\0';
+	return (res);
+}
+
+char	*update_static_str(char *static_str)
+{
+	char	*new_static_str;
+	char	*line_pointer;
+
+	if(!ft_strchr(static_str, '\n'))
+		return (NULL);
+	line_pointer = ft_strchr(static_str, '\n') + 1;
+	new_static_str = ft_strdup(line_pointer);
+	free(static_str);
+	return (new_static_str);
+}
+
 char	*get_next_line(int fd)
 {
-	static int	is_continue = 1;
-	static int	current_fd = 0;
+	static char	*static_str = NULL;
+	static int	current_fd = 1;
 	char		*res;
 	char		*buf;
 
 	res = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (current_fd != fd || is_continue == 0)
+	if(current_fd != fd)
 	{
 		current_fd = fd;
-		is_continue = 1;
+		free(static_str);
+		static_str = NULL;
 	}
-	if (is_continue == -1)
+	buf = read_file(fd);
+	// printf("buf == %s\n", buf);
+	static_str = ft_strjoin(static_str, buf); //static_strとbufをfreeする
+	// printf("static_str == %s\n", static_str);
+	if(static_str == NULL || static_str[0] == '\0')
 		return (NULL);
-	while (is_continue > 0)
-	{
-		buf = read_file(current_fd, &is_continue);
-		res = ft_strjoin(res, buf);
-	}
+	res = cut_line(static_str);
+	// printf("res == %s\n", res);
+	static_str = update_static_str(static_str);
+	// printf("updated_static_str == %s\n", static_str);
 	return (res);
 }

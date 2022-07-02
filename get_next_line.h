@@ -17,10 +17,11 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-int		ft_strchr(char *s, int c);
-char	*read_file(int fd, int *read_res);
+char	*free_strs(char *str1, char *str2);
+char	*ft_strdup(const char *src);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *str);
-char	*free_strs(char *str1, char *str2);
+char	*ft_strchr(char *s, int c);
+void	ft_strlcat(char *dest, const char *src, size_t size);
 
 #endif
