@@ -1,3 +1,1 @@
-これはテストの文章ですこれはテストの文章です
-ここで改行
-
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.

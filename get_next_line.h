@@ -20,5 +20,6 @@ char	*get_next_line(int fd);
 int		ft_strchr(char *s, int c);
 char	*read_file(int fd, int *read_res);
 char	*ft_strjoin(char *s1, char *s2);
+size_t	ft_strlen(const char *str);
 
 #endif
