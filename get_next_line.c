@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 char	*read_file(int fd, int *is_continue)
 {
@@ -26,29 +25,19 @@ char	*read_file(int fd, int *is_continue)
 	while (i < BUFFER_SIZE)
 	{
 		*is_continue = read(fd, res + i, 1);
-		// printf("is_continue == %d, res[i] == %c\n", *is_continue, res[i]);
-		if(res[i] == '\0' && i == 0)
-		{
-			free(res);
-			return (NULL);
-		}
-		if (res[i] == '\n')
+		if (res[i] == '\0' && i == 0)
+			return (free_strs(res, NULL));
+		if (res[i] == '\n' || *is_continue == 0)
 		{
 			res[i + 1] = '\0';
-			*is_continue = 0;
-			return (res);
-		}
-		if (*is_continue == 0)
-		{
-			res[i + 1] = '\0';
-			*is_continue = -1;
+			if (*is_continue == 0)
+				*is_continue = -1;
+			else
+				*is_continue = 0;
 			return (res);
 		}
 		if (*is_continue == -1)
-		{
-			free(res);
-			return (NULL);
-		}
+			return (free_strs(res, NULL));
 		i ++;
 	}
 	return (res);
@@ -74,10 +63,7 @@ char	*get_next_line(int fd)
 	while (is_continue > 0)
 	{
 		buf = read_file(current_fd, &is_continue);
-		// printf("buf == %s, res == %s\n", buf, res);
-		// printf("is_continue == %d\n", is_continue);
 		res = ft_strjoin(res, buf);
-		// printf("res == %s\n", res);
 	}
 	return (res);
 }
