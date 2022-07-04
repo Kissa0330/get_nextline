@@ -9,7 +9,7 @@
 /*   Updated: 2022/06/19 19:48:24 by rtakano          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_strdup(const char *src)
 {
