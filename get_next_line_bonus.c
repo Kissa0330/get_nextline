@@ -15,10 +15,11 @@
 char	*read_file(int fd, char *static_str)
 {
 	char	*buf;
+	char	*tmp;
 	int		read_res;
 
 	read_res = 1;
-	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buf = malloc(((size_t)BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
 		return (NULL);
 	buf[BUFFER_SIZE] = '\0';
@@ -31,7 +32,9 @@ char	*read_file(int fd, char *static_str)
 			return (NULL);
 		}
 		buf[read_res] = '\0';
+		tmp = static_str;
 		static_str = ft_strjoin(static_str, buf);
+		free(tmp);
 	}
 	free(buf);
 	return (static_str);
@@ -45,6 +48,8 @@ char	*cut_line(char *static_str)
 	if (!static_str[0])
 		return (NULL);
 	res = malloc(sizeof(char) * ft_strlen(static_str) + 1);
+	if (!res)
+		return (NULL);
 	i = 0;
 	while (static_str[i] != '\n' && static_str[i])
 	{
