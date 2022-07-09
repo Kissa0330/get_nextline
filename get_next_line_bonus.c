@@ -78,10 +78,10 @@ static char	*update_static_str(char *static_str)
 
 char	*get_next_line(int fd)
 {
-	static char	*static_str[1025];
+	static char	*static_str[1024];
 	char		*res;
 
-	if ((fd < 0 && fd < 1025) || BUFFER_SIZE <= 0)
+	if ((fd < 0 || fd > 1024) || BUFFER_SIZE <= 0)
 		return (NULL);
 	static_str[fd] = read_file(fd, static_str[fd]);
 	if (!static_str[fd])

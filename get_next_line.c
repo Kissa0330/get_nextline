@@ -79,7 +79,7 @@ static char	*update_static_str(char *static_str)
 char	*get_next_line(int fd)
 {
 	static char	*static_str = NULL;
-	static int	current_fd = 1;
+	static int	current_fd = 0;
 	char		*res;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
