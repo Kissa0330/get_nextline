@@ -22,5 +22,6 @@ char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *str);
 char	*ft_strchr(char *s, int c);
 void	ft_strlcat(char *dest, const char *src, size_t size);
+char	*judge_null_free_strs(char *s1, char *s2);
 
 #endif

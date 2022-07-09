@@ -11,6 +11,15 @@
 /* ************************************************************************** */
 #include "get_next_line_bonus.h"
 
+char	*judge_null_free_strs(char *s1, char *s2)
+{
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return (NULL);
+}
+
 char	*ft_strdup(const char *src)
 {
 	char	*copy_str;

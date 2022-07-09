@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*read_file(int fd, char *static_str)
+static char	*read_file(int fd, char *static_str)
 {
 	char	*buf;
 	char	*tmp;
@@ -21,22 +21,13 @@ char	*read_file(int fd, char *static_str)
 	read_res = 1;
 	buf = malloc(((size_t)BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf)
-	{
-		if (static_str)
-			free(static_str);
-		return (NULL);
-	}
+		return (judge_null_free_strs(static_str, NULL));
 	buf[BUFFER_SIZE] = '\0';
 	while (!ft_strchr(static_str, '\n') && read_res != 0)
 	{
 		read_res = read(fd, buf, BUFFER_SIZE);
 		if (read_res == -1)
-		{
-			if (static_str)
-				free(static_str);
-			free(buf);
-			return (NULL);
-		}
+			return (judge_null_free_strs(static_str, buf));
 		buf[read_res] = '\0';
 		tmp = static_str;
 		static_str = ft_strjoin(static_str, buf);
@@ -46,7 +37,7 @@ char	*read_file(int fd, char *static_str)
 	return (static_str);
 }
 
-char	*cut_line(char *static_str)
+static char	*cut_line(char *static_str)
 {
 	char	*res;
 	size_t	i;
@@ -72,16 +63,13 @@ char	*cut_line(char *static_str)
 	return (res);
 }
 
-char	*update_static_str(char *static_str)
+static char	*update_static_str(char *static_str)
 {
 	char	*line_pointer;
 	char	*new_static_str;
 
 	if (!ft_strchr(static_str, '\n'))
-	{
-		free(static_str);
-		return (NULL);
-	}
+		return (judge_null_free_strs(static_str, NULL));
 	line_pointer = ft_strchr(static_str, '\n') + 1;
 	new_static_str = ft_strdup(line_pointer);
 	free(static_str);
@@ -99,8 +87,7 @@ char	*get_next_line(int fd)
 	if (current_fd != fd)
 	{
 		current_fd = fd;
-		free(static_str);
-		static_str = NULL;
+		static_str = judge_null_free_strs(static_str, NULL);
 	}
 	static_str = read_file(current_fd, static_str);
 	if (!static_str)
